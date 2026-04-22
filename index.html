@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>TRINITY — Enter the Matrix</title>
+<meta name="description" content="An immersive Matrix experience. Trinity falls through streams of code. Scroll to descend." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="is-loading">
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader__core">
+    <div class="loader__label"><span>WAKE UP, NEO…</span></div>
+    <div class="loader__bar"><i></i></div>
+    <div class="loader__hint" id="enterHint">CLICK ANYWHERE TO ENTER</div>
+  </div>
+</div>
+
+<!-- Matrix rain canvas -->
+<canvas id="matrix"></canvas>
+
+<!-- Grain / scanlines -->
+<div class="grain" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"><i></i><b></b></div>
+
+<!-- Header -->
+<header class="nav">
+  <a class="nav__logo data-hover" href="#top" data-cursor="view">
+    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+      <path d="M4 4 L16 28 L28 4 L22 4 L16 16 L10 4 Z" fill="currentColor"/>
+    </svg>
+    <span>TRINITY_</span>
+  </a>
+  <nav class="nav__links">
+    <a class="data-hover" href="#descent" data-cursor="go">01 · DESCENT</a>
+    <a class="data-hover" href="#whois" data-cursor="go">02 · WHO IS SHE</a>
+    <a class="data-hover" href="#signal" data-cursor="go">03 · SIGNAL</a>
+    <a class="data-hover" href="#redpill" data-cursor="go">04 · RED PILL</a>
+  </nav>
+  <button id="soundBtn" class="sound data-hover" data-cursor="mute" aria-pressed="false">
+    <span class="sound__dot"></span>
+    <span class="sound__label">SOUND OFF</span>
+    <span class="sound__bars"><i></i><i></i><i></i><i></i></span>
+  </button>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero__stage">
+    <div class="hero__halo"></div>
+    <div class="hero__trinity" id="trinity">
+      <!-- Stylised Trinity silhouette built from SVG -->
+      <svg viewBox="0 0 400 720" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <linearGradient id="gGlow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8affc0" stop-opacity=".95"/>
+            <stop offset=".5" stop-color="#17ff7a" stop-opacity=".75"/>
+            <stop offset="1" stop-color="#003b18" stop-opacity=".6"/>
+          </linearGradient>
+          <linearGradient id="gCoat" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0a0a0a"/>
+            <stop offset=".6" stop-color="#060606"/>
+            <stop offset="1" stop-color="#020202"/>
+          </linearGradient>
+          <radialGradient id="gShine" cx=".5" cy=".2" r=".6">
+            <stop offset="0" stop-color="#caffe0" stop-opacity=".9"/>
+            <stop offset="1" stop-color="#caffe0" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Cape/coat flowing tail -->
+        <path class="coat coat--tail" filter="url(#softGlow)"
+          d="M120 420
+             C 70 520, 40 620, 70 720
+             L 330 720
+             C 360 620, 330 520, 280 420
+             C 260 520, 140 520, 120 420 Z"
+          fill="url(#gCoat)" />
+
+        <!-- Body + coat shoulders -->
+        <path class="coat"
+          d="M145 230
+             C 110 260, 95 330, 110 420
+             C 140 450, 260 450, 290 420
+             C 305 330, 290 260, 255 230
+             C 240 250, 160 250, 145 230 Z"
+          fill="url(#gCoat)" />
+
+        <!-- Inner shirt highlight -->
+        <path class="shirt"
+          d="M175 240 C 185 300, 215 300, 225 240 L 215 420 L 185 420 Z"
+          fill="#0b0b0b" />
+
+        <!-- Neck -->
+        <rect x="188" y="200" width="24" height="30" fill="#141414" />
+
+        <!-- Head -->
+        <ellipse cx="200" cy="175" rx="42" ry="52" fill="#151515"/>
+        <path d="M160 150 C 170 110, 230 110, 240 150 L 242 185 C 225 170, 175 170, 158 185 Z"
+              fill="#050505"/>
+
+        <!-- Sunglasses -->
+        <g class="glasses" filter="url(#softGlow)">
+          <rect x="164" y="160" width="34" height="14" rx="6" fill="#000" stroke="#17ff7a" stroke-width="1.2"/>
+          <rect x="202" y="160" width="34" height="14" rx="6" fill="#000" stroke="#17ff7a" stroke-width="1.2"/>
+          <rect x="196" y="165" width="8" height="4" fill="#000"/>
+          <rect x="165" y="162" width="10" height="4" rx="2" fill="url(#gShine)"/>
+          <rect x="203" y="162" width="10" height="4" rx="2" fill="url(#gShine)"/>
+        </g>
+
+        <!-- Arms outstretched (flight pose) -->
+        <path class="arm"
+          d="M110 300
+             C 60 330, 30 380, 20 440
+             C 40 430, 70 410, 105 380 Z" fill="url(#gCoat)"/>
+        <path class="arm"
+          d="M290 300
+             C 340 330, 370 380, 380 440
+             C 360 430, 330 410, 295 380 Z" fill="url(#gCoat)"/>
+
+        <!-- Legs -->
+        <path class="leg"
+          d="M175 440 C 160 540, 150 620, 155 710 L 195 710 C 200 620, 200 540, 200 440 Z"
+          fill="url(#gCoat)"/>
+        <path class="leg"
+          d="M225 440 C 240 540, 250 620, 245 710 L 205 710 C 200 620, 200 540, 200 440 Z"
+          fill="url(#gCoat)"/>
+
+        <!-- Glow aura -->
+        <ellipse class="aura" cx="200" cy="370" rx="190" ry="260"
+                 fill="url(#gGlow)" opacity=".25"/>
+      </svg>
+
+      <!-- Streaks behind trinity -->
+      <div class="streaks" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__copy">
+    <p class="eyebrow"><span class="dot"></span>SECTOR 01 // NEBUCHADNEZZAR UPLINK</p>
+    <h1 class="title">
+      <span class="title__line" data-split>SHE DOESN'T</span>
+      <span class="title__line" data-split>FALL —</span>
+      <span class="title__line title__line--em" data-split>SHE <em>DESCENDS</em>.</span>
+    </h1>
+    <p class="lede">
+      A shard of consciousness cutting through a river of green.
+      Trinity rewrites the rules of the Matrix at terminal velocity.
+      <span class="cursor-blink">_</span>
+    </p>
+    <div class="meta">
+      <div><b>LAT</b> 37.7749°</div>
+      <div><b>LNG</b> -122.4194°</div>
+      <div><b>VEL</b> <span id="velocity">0981</span> m/s</div>
+      <div><b>SYS</b> CONSTRUCT/OK</div>
+    </div>
+  </div>
+
+  <div class="hero__scroll">
+    <span>SCROLL TO DESCEND</span>
+    <svg viewBox="0 0 12 40" width="12" height="40"><path d="M6 0 V36 M2 30 L6 38 L10 30" stroke="currentColor" fill="none" stroke-width="1.2"/></svg>
+  </div>
+
+  <!-- marquee ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <span>WAKE UP NEO</span><em>✦</em>
+      <span>THE MATRIX HAS YOU</span><em>✦</em>
+      <span>FOLLOW THE WHITE RABBIT</span><em>✦</em>
+      <span>KNOCK, KNOCK</span><em>✦</em>
+      <span>THERE IS NO SPOON</span><em>✦</em>
+      <span>WAKE UP NEO</span><em>✦</em>
+      <span>THE MATRIX HAS YOU</span><em>✦</em>
+      <span>FOLLOW THE WHITE RABBIT</span><em>✦</em>
+      <span>KNOCK, KNOCK</span><em>✦</em>
+      <span>THERE IS NO SPOON</span><em>✦</em>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 02 - DESCENT -->
+<section class="section descent" id="descent">
+  <div class="section__num">/ 02</div>
+  <h2 class="section__title" data-split-lines>
+    <span>A BODY IN</span>
+    <span>FREE FALL.</span>
+    <span>A MIND IN</span>
+    <span>FREE WILL.</span>
+  </h2>
+  <div class="descent__grid">
+    <article class="card data-hover" data-cursor="read">
+      <header>01</header>
+      <h3>Terminal Velocity</h3>
+      <p>Wind tears at the leather coat. The world becomes vertical — a waterfall of luminous glyphs.</p>
+    </article>
+    <article class="card data-hover" data-cursor="read">
+      <header>02</header>
+      <h3>Zero Gravity</h3>
+      <p>In the construct, physics is only suggestion. Trinity writes a different equation on the way down.</p>
+    </article>
+    <article class="card data-hover" data-cursor="read">
+      <header>03</header>
+      <h3>Signal Lock</h3>
+      <p>The operator finds her in the stream. Morpheus whispers coordinates. A door opens mid-air.</p>
+    </article>
+  </div>
+</section>
+
+<!-- SECTION 03 - WHO IS SHE -->
+<section class="section whois" id="whois">
+  <div class="section__num">/ 03</div>
+  <div class="whois__row">
+    <h2 class="section__title">
+      <span data-split>WHO</span>
+      <span data-split>IS</span>
+      <span data-split><em>SHE?</em></span>
+    </h2>
+    <div class="whois__body">
+      <p>
+        <b>TRINITY</b> — first to crack the IRS D-base, the one who ran a 4-minute mile across Chicago rooftops, a ghost inside the green. Not a symbol. A proof.
+      </p>
+      <ul class="specs">
+        <li><span>CLASSIFICATION</span><b>OPERATOR · CRACK PILOT</b></li>
+        <li><span>HOME</span><b>NEBUCHADNEZZAR, DECK-3</b></li>
+        <li><span>STATUS</span><b>INSIDE THE CONSTRUCT</b></li>
+        <li><span>THREAT</span><b>NEAR-MYTHICAL</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 04 - SIGNAL -->
+<section class="section signal" id="signal">
+  <div class="section__num">/ 04</div>
+  <h2 class="section__title"><span data-split>BROADCAST</span> <span data-split><em>ON LOOP.</em></span></h2>
+  <div class="signal__panel">
+    <pre class="terminal" id="terminal"></pre>
+    <div class="signal__side">
+      <div class="glyph-stack" id="glyphStack"></div>
+      <p>Audio synthesized from first principles — three detuned sawtooth drones, a filtered sub-bass pulse at 54 BPM, and a stochastic rain of sine blips mapped to the falling glyphs above.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 05 - RED PILL / CTA -->
+<section class="section redpill" id="redpill">
+  <div class="section__num">/ 05</div>
+  <h2 class="section__title section__title--xl">
+    <span data-split>CHOOSE</span>
+    <span data-split>A PILL.</span>
+  </h2>
+  <div class="pills">
+    <button class="pill pill--red data-hover" data-cursor="take">
+      <span class="pill__glow"></span>
+      <b>RED</b>
+      <em>Stay in wonderland. See how deep the rabbit hole goes.</em>
+    </button>
+    <button class="pill pill--blue data-hover" data-cursor="take">
+      <span class="pill__glow"></span>
+      <b>BLUE</b>
+      <em>Wake up in your bed. Believe whatever you want to believe.</em>
+    </button>
+  </div>
+
+  <footer class="foot">
+    <p>© CONSTRUCT // A fan tribute to <i>The Matrix</i>. Design language inspired by lusion.co.</p>
+    <p class="foot__uid">UID · 1010-1101-0110-<span id="uid"></span></p>
+  </footer>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
